@@ -1,3 +1,22 @@
+# web-protocol-react-socket-client
+
+- `npx create-react-app web-protocol-react-socket-client`
+- `yarn add socket.io-client uuid react-router-dom`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

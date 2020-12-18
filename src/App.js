@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import { v1 as uuid } from 'uuid'
+import io from 'socket.io-client'
 
-function App() {
+const App = () => {
+  let mySocketIoClientId = uuid();
+  let socket = null
+  const openExternalApp = () => {
+    window.location.href = 'du-web-protocol-electron-socket-server://open'
+  }
+  const sendMySocketId = () => {
+    window.location.href = `du-web-protocol-electron-socket-server://${mySocketIoClientId}`
+  }
+  const connectToSocketServer = () => {
+    if (!socket) {
+      // socket = io.connect('http://localhost:8000')
+      socket = io.connect('/') // proxy instead, for quick fix to cors
+      socket.on('cpu data', (data) => {
+        console.log('cpu data: ', data)
+      })
+    }
+  }
+  const requestNativeData = () => {
+    socket.emit('get cpu')
+  }
+  const closeExternalApp = () => {
+    if (socket) {
+      socket.close()
+    }
+    window.location.href = 'du-web-protocol-electron-socket-server://close'
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div><button onClick={openExternalApp}>open external app</button></div>
+      <div><button onClick={sendMySocketId}>send my socket id</button></div>
+      <div><button onClick={connectToSocketServer}>connect to socket server</button></div>
+      <div><button onClick={requestNativeData}>request native data</button></div>
+      <div><button onClick={closeExternalApp}>close external server app</button></div>
+    </>
   );
 }
 
